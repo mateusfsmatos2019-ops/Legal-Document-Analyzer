@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Legal Document Analyzer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="hero glass-card">
+        <div>
+          <p class="eyebrow" data-i18n="eyebrow">AI-powered legal intelligence</p>
+          <h1 data-i18n="title">Legal Document Analyzer</h1>
+          <p class="hero-text" data-i18n="subtitle">Upload contracts, agreements, and policies to extract clauses, risks, dates, and bilingual insights.</p>
+        </div>
+        <div class="hero-actions">
+          <div class="language-switch" role="group" aria-label="Language switcher">
+            <button class="language-button active" data-language="en" type="button">EN</button>
+            <button class="language-button" data-language="pt" type="button">PT</button>
+          </div>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="panel-stack">
+          <article class="glass-card upload-card">
+            <div class="section-heading">
+              <div>
+                <h2 data-i18n="uploadTitle">Upload documents</h2>
+                <p data-i18n="uploadSubtitle">Drag and drop multiple PDF, DOCX, or TXT files.</p>
+              </div>
+              <button id="analyzeButton" class="primary-button" type="button" disabled data-i18n="analyzeButton">Analyze documents</button>
+            </div>
+
+            <label id="dropzone" class="dropzone" for="fileInput">
+              <input id="fileInput" type="file" accept=".pdf,.docx,.txt" multiple hidden />
+              <span class="dropzone-icon">⬆</span>
+              <strong data-i18n="dropzoneTitle">Drop files here</strong>
+              <span data-i18n="dropzoneText">or click to browse from your device</span>
+            </label>
+
+            <div class="inline-note" id="statusMessage" data-i18n="statusIdle">Upload one or more documents to start the analysis.</div>
+            <div id="filePreview" class="file-preview-list" aria-live="polite"></div>
+          </article>
+
+          <article class="glass-card settings-card">
+            <div class="section-heading compact">
+              <div>
+                <h2 data-i18n="aiTitle">Optional AI enhancement</h2>
+                <p data-i18n="aiSubtitle">Use OpenAI or Claude for deeper extraction. Offline analysis still works.</p>
+              </div>
+            </div>
+
+            <div class="settings-grid">
+              <label>
+                <span data-i18n="providerLabel">Provider</span>
+                <select id="providerSelect">
+                  <option value="openai">OpenAI</option>
+                  <option value="anthropic">Claude</option>
+                </select>
+              </label>
+              <label>
+                <span data-i18n="modelLabel">Model</span>
+                <input id="modelInput" type="text" placeholder="gpt-4.1-mini / claude-3-5-sonnet-latest" />
+              </label>
+              <label class="wide-field">
+                <span data-i18n="apiKeyLabel">API key</span>
+                <input id="apiKeyInput" type="password" placeholder="sk-..." autocomplete="off" />
+              </label>
+              <label class="wide-field">
+                <span data-i18n="endpointLabel">Endpoint</span>
+                <input id="endpointInput" type="url" placeholder="https://api.openai.com/v1/chat/completions" />
+              </label>
+            </div>
+            <p class="helper-text" data-i18n="aiHelper">The API key stays only in this browser session. Provider, model, and endpoint are stored locally.</p>
+          </article>
+        </section>
+
+        <section class="glass-card results-card">
+          <div class="tabs" role="tablist" aria-label="Analysis tabs">
+            <button class="tab-button active" data-tab="summary" role="tab" aria-selected="true" type="button" data-i18n="tabSummary">Summary</button>
+            <button class="tab-button" data-tab="clauses" role="tab" aria-selected="false" type="button" data-i18n="tabClauses">Clauses</button>
+            <button class="tab-button" data-tab="risks" role="tab" aria-selected="false" type="button" data-i18n="tabRisks">Risks</button>
+            <button class="tab-button" data-tab="timeline" role="tab" aria-selected="false" type="button" data-i18n="tabTimeline">Timeline</button>
+            <button class="tab-button" data-tab="translate" role="tab" aria-selected="false" type="button" data-i18n="tabTranslate">Translate</button>
+          </div>
+
+          <div class="results-toolbar">
+            <div>
+              <h2 data-i18n="resultsTitle">Analysis workspace</h2>
+              <p data-i18n="resultsSubtitle">Review extracted legal insights for every uploaded document.</p>
+            </div>
+            <div class="translation-target">
+              <label for="translationLanguage" data-i18n="translationTarget">Translate results to</label>
+              <select id="translationLanguage"></select>
+            </div>
+          </div>
+
+          <div id="loadingState" class="loading-grid hidden" aria-hidden="true">
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+          </div>
+
+          <div id="emptyState" class="empty-state">
+            <div class="empty-icon">⚖️</div>
+            <h3 data-i18n="emptyTitle">No analysis yet</h3>
+            <p data-i18n="emptyText">Your summaries, clauses, risks, and translated insights will appear here.</p>
+          </div>
+
+          <div id="resultsContent" class="results-content hidden"></div>
+        </section>
+      </main>
+    </div>
+
+    <script src="https://unpkg.com/mammoth@1.8.0/mammoth.browser.min.js"></script>
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>
