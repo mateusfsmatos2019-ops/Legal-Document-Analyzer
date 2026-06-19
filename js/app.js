@@ -17,7 +17,7 @@ const UI_TEXT = {
     modelLabel: "Model",
     apiKeyLabel: "API key",
     endpointLabel: "Endpoint",
-    aiHelper: "API settings are stored only in your browser using localStorage.",
+    aiHelper: "The API key stays only in this browser session. Provider, model, and endpoint are stored locally.",
     tabSummary: "Summary",
     tabClauses: "Clauses",
     tabRisks: "Risks",
@@ -68,7 +68,7 @@ const UI_TEXT = {
     modelLabel: "Modelo",
     apiKeyLabel: "Chave da API",
     endpointLabel: "Endpoint",
-    aiHelper: "As configurações da API ficam armazenadas apenas no navegador via localStorage.",
+    aiHelper: "A chave da API fica apenas nesta sessão do navegador. Provedor, modelo e endpoint são armazenados localmente.",
     tabSummary: "Resumo",
     tabClauses: "Cláusulas",
     tabRisks: "Riscos",
@@ -153,14 +153,18 @@ function initialize() {
 
 function loadAiSettings() {
   try {
-    return { ...DEFAULT_AI_SETTINGS, ...(JSON.parse(localStorage.getItem("legalAnalyzerAiSettings") || "{}")) };
+    const savedSettings = JSON.parse(localStorage.getItem("legalAnalyzerAiSettings") || "{}");
+    const { provider, model, endpoint } = { ...DEFAULT_AI_SETTINGS, ...savedSettings };
+    localStorage.setItem("legalAnalyzerAiSettings", JSON.stringify({ provider, model, endpoint }));
+    return { ...DEFAULT_AI_SETTINGS, ...savedSettings, apiKey: "" };
   } catch {
     return { ...DEFAULT_AI_SETTINGS };
   }
 }
 
 function saveAiSettings() {
-  localStorage.setItem("legalAnalyzerAiSettings", JSON.stringify(state.aiSettings));
+  const { provider, model, endpoint } = state.aiSettings;
+  localStorage.setItem("legalAnalyzerAiSettings", JSON.stringify({ provider, model, endpoint }));
 }
 
 function bindUploadHandlers() {
