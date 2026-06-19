@@ -399,7 +399,7 @@ async function fetchAiAnalysis(extractedText, fallbackAnalysis) {
     ? { "Content-Type": "application/json", "x-api-key": state.aiSettings.apiKey, "anthropic-version": "2023-06-01" }
     : { "Content-Type": "application/json" };
   if (state.aiSettings.provider !== "anthropic") {
-    headers[["Author", "ization"].join("")] = String.fromCharCode(66, 101, 97, 114, 101, 114, 32) + state.aiSettings.apiKey;
+    headers["Authorization"] = "Bearer " + state.aiSettings.apiKey;
   }
   const response = await fetch(state.aiSettings.endpoint, { method: "POST", headers, body: JSON.stringify(payload) });
   if (!response.ok) throw new Error(`AI request failed with status ${response.status}`);

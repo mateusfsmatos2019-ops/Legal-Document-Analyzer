@@ -206,15 +206,15 @@ export function detectLanguage(text) {
 }
 
 export function extractParties(text) {
-  const normalized = text.replace(/\n+/g, " ");
+  const flattenedText = text.replace(/\n+/g, " ");
   const matches = [];
-  const betweenMatch = normalized.match(/(?:between|entre)\s+(.{3,80}?)\s+(?:and|e)\s+(.{3,80}?)(?:[.,;\n]|effective|dated|for the purpose)/i);
+  const betweenMatch = flattenedText.match(/(?:between|entre)\s+(.{3,80}?)\s+(?:and|e)\s+(.{3,80}?)(?:[.,;\n]|effective|dated|for the purpose)/i);
   if (betweenMatch) {
     matches.push(betweenMatch[1].trim(), betweenMatch[2].trim());
   }
 
   const entityRegex = /\b([A-Z][A-Za-z&.,\- ]{2,40}\s(?:LLC|LTD|INC|CORP|S\.A\.|LTDA|LIMITED|COMPANY))\b/g;
-  for (const match of normalized.matchAll(entityRegex)) {
+  for (const match of flattenedText.matchAll(entityRegex)) {
     matches.push(match[1].trim());
   }
 
